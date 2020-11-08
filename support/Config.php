@@ -48,7 +48,6 @@ class Config {
 
     // GETTERS
     public function token($key) { return self::$token; }
-    public function sender() { return self::$sender; }
     public function version() { return self::$version; }
 
 
@@ -56,9 +55,16 @@ class Config {
      * We have to build final API endpoint URL based on the
      * specified access version.
      */
-    public function url() {
-        return self::$url.self::$version;
-    }
+    public function url() { return self::$url.self::$version; }
+
+
+
+    /**
+     * This method is responsible for returning the sender
+     * id if defined or return false if the sender id is
+     * not defuned.
+     */
+    public function sender() { return ( isset(self::$sender) AND !empty(self::$sender) ) ? self::$sender : false; }
 }
 
 ?>
