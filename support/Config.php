@@ -3,59 +3,55 @@ namespace Zend\Support;
 
 class Config {
 
-	/**
-	 * We need to have registry to keep our configuration
-	 * values that requested later from the Zend SDK
-	 */
-	protected $Registry = array();
+    private static $token = null;
+    private static $version = "1.0";
+    private static $sender = null;
+    private static $url = "https://api.zend.lk/v";
+
+    public static function create(array $Config) {
+
+        /**
+         * Check if the authentication token is configured
+         * and throw an exception if not configured.
+         */
+        if ( isset($Config["token"]) AND !empty($Config["token"]) ):
+            self::$token = $Config["version"];
+        else:
+            throw new \Exception("undefined authentication token");
+        endif;
 
 
-	public function __construct(array $params) {
+        /**
+         * Check if we got any specific version to work with or
+         * fall back to default version that define in the sdk.
+         */
+        if ( isset($Config["version"]) AND !empty($Config["version"]) ):
+            self::$version = $Config["version"];
+        endif;
 
-		/**
-		 * Configure PHP SDK version information into the registry
-		 * so we can use this version information in everywhere.
-		 */
-		$this->Registry["sdk"] = array(
-			"version" => 1.0
-		);
+        /**
+         * Check if we got any specific sender id to work with
+         * and fall back to nothing. This will evaluvated again
+         * in the sending libraries to reconfigure or throw and
+         * exception
+         */
+        if ( isset($Config["sender"]) AND !empty($Config["sender"]) ):
+            self::$sender = $Config["sender"];
+        endif;
 
-		/**
-		 * Check if we got authentication token (JWT) to access
-		 * Zend API and throw error if not.
-		 */
-		if ( isset($params["token"]) ):
-			$this->Registry["token"] = $params["token"];
-		else:
-			throw new \Exception("Authorization token undefined");
-		endif;
+        /**
+         * finally we return the instance of self object to utilize
+         * in the furthur actions inside in the SDK.
+         */
+        return new self;
+    }
 
-		/**
-		 * fall back to version 1.0 if the configuration value
-		 * not contain any version string with it.
-		 */
-		if ( isset($params["version"]) ):
-			$this->Registry["version"] = $params["version"];
-		else:
-			$this->Registry["version"] = "v1.0";
-		endif;
+    // GETTERS
+    public function url() { return self::$url; }
+    public function token($key) { return self::$token; }
+    public function sender() { return self::$sender; }
+    public function version() { return self::$version; }
 
-		/**
-		 * We have add any extra value without any validation to
-		 * the configuration registry from here on.
-		 */
-		foreach ( $params as $key => $element ):
-			if ( !array_key_exists($key, $this->Registry) ):
-				$this->Registry[$key] = $element;
-			endif;
-		endforeach;
-
-	}
-
-
-	public function __get($key) {
-		return ( array_key_exists($key, $this->Registry) ) ? $this->Registry[$key] : false;
-	}
 }
 
 ?>
