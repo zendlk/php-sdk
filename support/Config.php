@@ -15,7 +15,7 @@ class Config {
          * and throw an exception if not configured.
          */
         if ( isset($Config["token"]) AND !empty($Config["token"]) ):
-            self::$token = $Config["version"];
+            self::$token = $Config["token"];
         else:
             throw new \Exception("undefined authentication token");
         endif;
