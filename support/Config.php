@@ -47,11 +47,18 @@ class Config {
     }
 
     // GETTERS
-    public function url() { return self::$url; }
     public function token($key) { return self::$token; }
     public function sender() { return self::$sender; }
     public function version() { return self::$version; }
 
+
+    /**
+     * We have to build final API endpoint URL based on the
+     * specified access version.
+     */
+    public function url() {
+        return self::$url.self::$version;
+    }
 }
 
 ?>
