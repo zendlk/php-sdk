@@ -13,6 +13,14 @@ class Config {
 	public function __construct(array $params) {
 
 		/**
+		 * Configure PHP SDK version information into the registry
+		 * so we can use this version information in everywhere.
+		 */
+		$this->Registry["sdk"] = array(
+			"version" => 1.0
+		);
+
+		/**
 		 * Check if we got authentication token (JWT) to access
 		 * Zend API and throw error if not.
 		 */
