@@ -47,7 +47,7 @@ class Config {
     }
 
     // GETTERS
-    public function token($key) { return self::$token; }
+    public function token() { return self::$token; }
     public function version() { return self::$version; }
 
 
