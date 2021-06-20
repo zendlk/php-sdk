@@ -22,10 +22,10 @@ class Message {
          * to check configuration instance for sender id information.
          */
         if ( isset($Message["sender"]) AND !empty($Message["sender"]) ):
-            self::$json["sender"] = $Message["sender"];
+            self::$json["from"] = $Message["sender"];
         else:
             if ( self::$config->sender() ):
-                self::$json["sender"] = self::$config->sender();
+                self::$json["from"] = self::$config->sender();
             else:
                 throw new \Exception("sender id undefined");
             endif;
@@ -36,12 +36,8 @@ class Message {
          * Check if we got valid set of destination or and throw an
          * Exception if there is no destinations defined.
          */
-        if ( array_key_exists("to", $Message) ):
-            if ( is_array($Message["to"]) ):
-                self::$json["to"] = $Message["to"];
-            else:
-                throw new \Exception("destinations must be array");
-            endif;
+        if ( isset($Message["to"]) AND !empty($Message["to"]) ):
+            self::$json["to"] = $Message["to"];
         else:
             throw new \Exception("destination undefined");
         endif;
@@ -93,6 +89,8 @@ class Message {
         curl_setopt($handler, CURLOPT_USERAGENT, "zend/php-sdk");
         self::$response = json_decode(curl_exec($handler), true);
         curl_close($handler);
+
+        var_dump( self::$response );
 
         /**
          * return true or false based on the reponse we got
