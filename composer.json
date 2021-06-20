@@ -1,5 +1,6 @@
 {
     "name": "zendlk/php-sdk",
+    "type": "library",
     "description": "Zend PHP SDK",
     "support": {
         "issues": "https://github.com/zendlk/php-sdk/issues",
@@ -17,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Zend\\": "src/"
         }
     },
     "license": "GPL-3.0-or-later",
