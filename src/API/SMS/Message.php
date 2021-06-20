@@ -90,8 +90,6 @@ class Message {
         self::$response = json_decode(curl_exec($handler), true);
         curl_close($handler);
 
-        var_dump( self::$response );
-
         /**
          * return true or false based on the reponse we got
          * from the Zend API.
