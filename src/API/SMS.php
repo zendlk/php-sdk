@@ -1,7 +1,7 @@
 <?php
-namespace Zend\API\SMS;
+namespace Zend\API;
 
-class Message {
+class SMS {
 
     private static $json = array();
     private static $config = null;
@@ -31,7 +31,6 @@ class Message {
             endif;
         endif;
 
-
         /**
          * Check if we got valid set of destination or and throw an
          * Exception if there is no destinations defined.
@@ -39,9 +38,8 @@ class Message {
         if ( isset($Message["to"]) AND !empty($Message["to"]) ):
             self::$json["to"] = $Message["to"];
         else:
-            throw new \Exception("destination undefined");
+            throw new \Exception("Undefined recipients");
         endif;
-
 
         /**
          * Check if we got valid message body and throw an
@@ -53,22 +51,13 @@ class Message {
             throw new \Exception("message text undefined");
         endif;
 
-
-        /**
-         * define the message type as SMS because this method will
-         * responsible for routing SMS messages only.
-         */
-        self::$json["type"] = "sms";
-
-
         /**
          * Here we return the instance of self to chain other
          * method on the self instance for furthur tasks
          */
         return new self;
+
     }
-
-
 
     /**
      * We can call to this method to dispatch the API
@@ -77,7 +66,7 @@ class Message {
      */
     public function send() {
 
-        $handler = curl_init(self::$config->url()."/message");
+        $handler = curl_init(self::$config->url()."/sms");
         curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($handler, CURLOPT_POSTFIELDS, json_encode(self::$json));
         curl_setopt($handler, CURLOPT_HEADER, false);
@@ -87,7 +76,7 @@ class Message {
         ]);
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handler, CURLOPT_USERAGENT, "zend/php-sdk");
-        self::$response = json_decode(curl_exec($handler), true);
+        $response = json_decode(curl_exec($handler), true);
         curl_close($handler);
 
         /**
@@ -95,9 +84,8 @@ class Message {
          * from the Zend API.
          */
         return ( self::$response["status"] == "success" ) ? true : false;
+
     }
-
-
 
     /**
      * Get information out from the API response once we called
@@ -114,6 +102,7 @@ class Message {
             return false;
         endif;
     }
+
 }
 
 ?>
