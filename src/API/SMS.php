@@ -83,7 +83,7 @@ class SMS {
          * return true or false based on the reponse we got
          * from the Zend API.
          */
-        return ( self::$response["status"] == "success" ) ? true : false;
+        return ( isset(self::$response["status"]) == "success" ) ? true : false;
 
     }
 
